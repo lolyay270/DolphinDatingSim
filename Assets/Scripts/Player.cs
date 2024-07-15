@@ -1,44 +1,65 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    private Controls _controls;
+    [Header("Movement Speeds")]
+    [SerializeField] private float swimSpeed = 3f;
+    [SerializeField] private float boostMultiplier = 2f;
+    [SerializeField] private float boostActiveTime = 2f;
+    [SerializeField] private float boostDelayTime = 5f;
 
-    private InputAction _moveAction, _lookAction;
+    [Header("Look Sensitivity")]
+    [SerializeField] private float mouseSensitivity = 2f;
+    [SerializeField] private float verticleRange = 80f;
+
+    //references
+    private PlayerInputHandler inputHandler;
+
+    //internal variables
+    private bool boostDoneDelay = true;
+
+    private float currentSpeed;
 
     private void Awake()
     {
-        _controls = new Controls();
+        inputHandler = PlayerInputHandler.Instance;
+        currentSpeed = swimSpeed;
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        _moveAction = _controls.Player.Move;
-        _moveAction.Enable();
-        _lookAction = _controls.Player.Look;
-        _lookAction.Enable();
-        _controls.Player.Bite.performed += OnJump;
-        _controls.Player.Bite.Enable();
+        HandleMovement();
+        HandleRotation();
     }
 
-    private void OnDisable()
+    private void HandleMovement()
     {
-        _moveAction.Disable();
-        _lookAction.Disable();
-        _controls.Player.Bite.Disable();
+        if (boostDoneDelay && inputHandler.BoostTriggered)
+        {
+            StartCoroutine(HandleBoostRunAndDelay());
+        }
+
+        Vector3 inputDirection = new(inputHandler.MoveInput.x, 0, inputHandler.MoveInput.y);
+        inputDirection.Normalize();
+
+        transform.Translate(currentSpeed * Time.deltaTime * inputDirection);
     }
 
-    private void OnJump(InputAction.CallbackContext contect)
-    {
-        print("bite");
+    private IEnumerator HandleBoostRunAndDelay()
+    { 
+        boostDoneDelay = false;
+        currentSpeed *= boostMultiplier;
+        yield return new WaitForSeconds(boostActiveTime);
+        currentSpeed = swimSpeed;
+        yield return new WaitForSeconds(boostDelayTime);
+        boostDoneDelay = true;
     }
 
-    private void FixedUpdate()
+    private void HandleRotation() 
     {
-        Vector2 moveDir = _moveAction.ReadValue<Vector2>();
-        print($"move: {moveDir}");
-        Vector2 lookDir = _lookAction.ReadValue<Vector2>();
-        print ($"look: {lookDir}");
+        float mouseXRotation = inputHandler.LookInput.x * mouseSensitivity;
+        float mouseYRotation = -inputHandler.LookInput.y * mouseSensitivity;
+        transform.Rotate(mouseYRotation, mouseXRotation, 0);
     }
 }
