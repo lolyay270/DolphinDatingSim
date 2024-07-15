@@ -23,12 +23,16 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        inputHandler = PlayerInputHandler.Instance;
         currentSpeed = swimSpeed;
     }
 
     private void Update()
     {
+        while ( inputHandler == null) //wait for inputHandler to exist
+        {
+            inputHandler = PlayerInputHandler.Instance;
+        }
+
         HandleMovement();
         HandleRotation();
     }
