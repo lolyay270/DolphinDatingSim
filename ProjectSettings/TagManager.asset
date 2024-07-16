@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Water
   - Bite Area
+  - Structure
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Structure
   - Water
   - UI
   - 
