@@ -3,37 +3,47 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [Header("Movement Speeds")]
-    [SerializeField] private float swimSpeed = 3f;
-    [SerializeField] private float boostMultiplier = 2f;
-    [SerializeField] private float boostActiveTime = 2f;
-    [SerializeField] private float boostDelayTime = 5f;
+    [Header("Water Movement")]
+    [SerializeField] private float forwardswimSpeed;
+    [SerializeField] private float nonForwardSwimSpeed;
+    [SerializeField] private float boostMultiplier;
+    [SerializeField] private float boostActiveTime;
+    [SerializeField] private float boostDelayTime;
+    [SerializeField] private float massInWater;
+    [SerializeField] private float dragInWater;
+
+    [Header("Air Movement")]
+    [SerializeField] private float massOutWater;
+    [SerializeField] private float dragOutWater;
 
     [Header("Look Sensitivity")]
-    [SerializeField] private float mouseSensitivity = 2f;
-    [SerializeField] private float verticleRange = 80f;
+    [SerializeField] private float mouseSensitivity;
 
     //references
     private PlayerInputHandler inputHandler;
 
     //internal variables
     private bool boostDoneDelay = true;
+    private bool boostActive;
+    private Rigidbody rb;
+    private bool movementEnabled;
 
-    private float currentSpeed;
+
+    //---------------------- METHODS ----------------------\\
 
     private void Awake()
     {
-        currentSpeed = swimSpeed;
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        while ( inputHandler == null) //wait for inputHandler to exist
+        while (inputHandler == null) //wait for inputHandler to exist
         {
             inputHandler = PlayerInputHandler.Instance;
         }
 
-        HandleMovement();
+        if (movementEnabled) HandleMovement();
         HandleRotation();
     }
 
@@ -41,29 +51,57 @@ public class Player : MonoBehaviour
     {
         if (boostDoneDelay && inputHandler.BoostTriggered)
         {
-            StartCoroutine(HandleBoostRunAndDelay());
+            StartCoroutine(HandleBoost());
         }
 
-        Vector3 inputDirection = new(inputHandler.MoveInput.x, 0, inputHandler.MoveInput.y);
-        inputDirection.Normalize();
+        Vector3 moveVector = //multiply by forward/non-forward speeds
+            (inputHandler.MoveInput.y > 0 ? forwardswimSpeed : nonForwardSwimSpeed) * inputHandler.MoveInput.y * transform.forward
+            + inputHandler.MoveInput.x * nonForwardSwimSpeed * transform.right;
 
-        transform.Translate(currentSpeed * Time.deltaTime * inputDirection);
+        moveVector *= (boostActive ? boostMultiplier : 1); //add boost multiplier
+
+        rb.AddForce(Time.deltaTime * moveVector, ForceMode.VelocityChange);
     }
 
-    private IEnumerator HandleBoostRunAndDelay()
-    { 
+    private IEnumerator HandleBoost()
+    {
         boostDoneDelay = false;
-        currentSpeed *= boostMultiplier;
+        boostActive = true;
         yield return new WaitForSeconds(boostActiveTime);
-        currentSpeed = swimSpeed;
+        boostActive = false;
         yield return new WaitForSeconds(boostDelayTime);
         boostDoneDelay = true;
     }
 
-    private void HandleRotation() 
+    //method to rotate player dolphin to mouse movement
+    private void HandleRotation()
     {
         float mouseXRotation = inputHandler.LookInput.x * mouseSensitivity;
         float mouseYRotation = -inputHandler.LookInput.y * mouseSensitivity;
-        transform.Rotate(mouseYRotation, mouseXRotation, 0);
+        rb.rotation *= Quaternion.Euler(mouseYRotation, mouseXRotation, 0);
+    }
+
+    //method to handle in water physics
+    private void OnTriggerEnter(Collider other) 
+    {
+        if (other.CompareTag("Water"))
+        {
+            movementEnabled = true;
+            rb.drag = dragInWater;
+            rb.mass = massInWater;
+            rb.useGravity = false;
+        }
+    }
+
+    //method to handle out of water physics
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Water"))
+        {
+            movementEnabled = false;
+            rb.drag = dragOutWater;
+            rb.mass = massOutWater;
+            rb.useGravity = true;
+        }
     }
 }

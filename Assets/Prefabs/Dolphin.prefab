@@ -642,7 +642,7 @@ GameObject:
   - component: {fileID: 5651433222456347588}
   m_Layer: 0
   m_Name: Dolphin
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -680,11 +680,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1798857e779e94b41b18987969f99dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swimSpeed: 5
-  boostMultiplier: 3
+  forwardswimSpeed: 40
+  nonForwardSwimSpeed: 15
+  boostMultiplier: 2
   boostActiveTime: 2
   boostDelayTime: 5
-  mouseSensitivity: 0.5
+  massInWater: 100
+  dragInWater: 2
+  massOutWater: 600
+  dragOutWater: 0.5
+  mouseSensitivity: 0.4
   verticleRange: 70
 --- !u!54 &5651433222456347588
 Rigidbody:
@@ -694,9 +699,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4805976111406588074}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 100
+  m_Drag: 2
+  m_AngularDrag: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
