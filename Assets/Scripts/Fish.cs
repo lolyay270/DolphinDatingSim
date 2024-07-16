@@ -3,7 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Fish : MonoBehaviour
 {
+    [SerializeField] private int pointsOnEat;
+
     private Rigidbody rb;
+    private bool eaten;
 
     // Start is called before the first frame update
     private void Awake()
@@ -31,7 +34,11 @@ public class Fish : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if enters dolphin head area and dolphin bites
-          // destroy this fish
+        if (other.CompareTag("Bite Area") && !eaten)
+        {
+            eaten = true;
+            GameManager.Instance.Points += pointsOnEat;
+            Destroy(gameObject);
+        }
     }
 }
