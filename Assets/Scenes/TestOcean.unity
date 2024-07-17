@@ -127,33 +127,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 250990806111405447, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
-      propertyPath: avgAngle
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 250990806111405447, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
-      propertyPath: maxAngle
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 250990806111405447, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
-      propertyPath: maxSpeed
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 250990806111405447, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
-      propertyPath: minSpeed
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 250990806111405447, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
-      propertyPath: rotationDelayTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1411228335347552097, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
       propertyPath: m_Name
       value: Fish
       objectReference: {fileID: 0}
     - target: {fileID: 2566850135629078013, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.83
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2566850135629078013, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -161,7 +141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2566850135629078013, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.11
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2566850135629078013, guid: 3984681dccaa81d4685fcc5d0d178c1a, type: 3}
       propertyPath: m_LocalRotation.w

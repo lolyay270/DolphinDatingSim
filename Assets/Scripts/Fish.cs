@@ -30,36 +30,37 @@ public class Fish : MonoBehaviour
         layerMask = 1 << layerToAvoid;
         rb = GetComponent<Rigidbody>();
         prevAngle = rb.rotation;
-        StartCoroutine(Rotate());
     }
 
     private void Update()
     {
+        Rotate();
         Movement();
+    }
+
+    //method to handle swimming with no collision checks
+    private void Rotate()
+    {
+        //make new horizontal angle, no constraints
+        float horRotate = Random.Range(-avgAngle, avgAngle) + rb.rotation.eulerAngles.y;
+
+        //make new vertical angle, constrained by maxAngle
+        float currentVert = rb.rotation.eulerAngles.x;
+        currentVert = (currentVert > 180 ? currentVert - 360 : currentVert); //fix 340 into -20
+        float vertRotate = Random.Range(-avgAngle, avgAngle) + currentVert; 
+        vertRotate = Mathf.Clamp(vertRotate, -maxAngle, maxAngle); //clamp to max angles
+
+        //rotate fish with new angles
+        rb.MoveRotation(Quaternion.Euler(vertRotate, horRotate, 0));
     }
 
     //method to push the fish forward
     private void Movement() 
     {
         float velocity = Random.Range(minSpeed, maxSpeed);
-        rb.AddForce(Vector3.forward * velocity);
+        rb.AddRelativeForce(Vector3.forward * velocity);
     }
-
-    //method to handle swimming with no collision checks
-    private IEnumerator Rotate()
-    {
-        float xAngle = Random.Range(-avgAngle, avgAngle);
-        float yAngle = Random.Range(-avgAngle, avgAngle);
-        Quaternion newAngle = Quaternion.Euler(xAngle, yAngle, 0);
-        newAngle.Normalize();
-        print(newAngle.eulerAngles);
-        rb.rotation = newAngle * prevAngle;
-        prevAngle = newAngle;
-
-        yield return null;
-        //yield return new WaitForSeconds(rotationDelayTime);
-    }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Bite Area") && !eaten)
