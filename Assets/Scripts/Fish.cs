@@ -19,6 +19,7 @@ public class Fish : MonoBehaviour
 
     //internal variables
     private Rigidbody rb;
+    private int biteAreaCount;
     private string status;
     private FishAvoidObjects largeTrigger;
     private List<GameObject> objectsToAvoid = new();
@@ -55,7 +56,7 @@ public class Fish : MonoBehaviour
                 {
                     if (obj.CompareTag("Structure")) status = "wall"; //stopping wall collision is 1st priority
                     else if (obj.CompareTag("Player")) //ANY objects are dolphin
-                    { 
+                    {
                         //flee 
                         continue;
                     }
@@ -115,9 +116,22 @@ public class Fish : MonoBehaviour
     {
         if (other.CompareTag("Bite Area") && status != "eaten")
         {
-            status = "eaten";
-            //GameManager.Instance.Points += pointsOnEat;       //BUG currently gets eaten if largeTrigger and Bite Area touch
-            //Destroy(gameObject);
+            biteAreaCount++;
+            if (biteAreaCount == 2)
+            {
+                status = "eaten";
+                GameManager.Instance.Points += pointsOnEat;
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    //utility method to help handle fish being eaten
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Bite Area") && status != "eaten")
+        {
+            biteAreaCount--;
         }
     }
 
