@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6615525384216408111}
   - component: {fileID: 5697905289209214951}
   - component: {fileID: 6072106925946448572}
-  - component: {fileID: 3515990446892554783}
   m_Layer: 0
   m_Name: Pectoral Fin
   m_TagString: Untagged
@@ -86,27 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3515990446892554783
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1324537821947693407}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2285848990919312233
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +205,6 @@ GameObject:
   - component: {fileID: 9161626050466590147}
   - component: {fileID: 5821801290827319424}
   - component: {fileID: 2215793271385545363}
-  - component: {fileID: 2156046864601145926}
   m_Layer: 0
   m_Name: Pectoral Fin (1)
   m_TagString: Untagged
@@ -302,27 +279,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2156046864601145926
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2569727410860728436}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3080633706088979723
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,7 +290,6 @@ GameObject:
   - component: {fileID: 7942167130457878573}
   - component: {fileID: 6032381821688488758}
   - component: {fileID: 6927868202826090397}
-  - component: {fileID: 4136648573084994173}
   m_Layer: 0
   m_Name: Dorsal Fin
   m_TagString: Untagged
@@ -409,27 +364,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4136648573084994173
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3080633706088979723}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3163979695428836409
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,7 +481,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6730047167222168568}
   - component: {fileID: 1748622084957722475}
-  - component: {fileID: 9126778675627792783}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -621,14 +554,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &9126778675627792783
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3980487734800785654}
-  m_Enabled: 1
 --- !u!1 &4805976111406588074
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +565,7 @@ GameObject:
   - component: {fileID: 5344117037246035762}
   - component: {fileID: 677986528811626383}
   - component: {fileID: 5651433222456347588}
+  - component: {fileID: 7463581788023450417}
   m_Layer: 0
   m_Name: Dolphin
   m_TagString: Player
@@ -718,6 +644,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &7463581788023450417
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805976111406588074}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4827366554094580248
 GameObject:
   m_ObjectHideFlags: 0

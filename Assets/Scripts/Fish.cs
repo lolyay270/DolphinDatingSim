@@ -1,4 +1,5 @@
-using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -13,29 +14,77 @@ public class Fish : MonoBehaviour
     [SerializeField] private float maxAngle;
     [SerializeField] private float rotationDelayTime;
 
-    [Header("Collision Avoidance")]
-    [SerializeField] private float wallFloorDistance;
-    [SerializeField] private int layerToAvoid = 3;
+    [Header("Object Avoidance")]
+    [SerializeField] private float avoidDistance;
 
+    //internal variables
     private Rigidbody rb;
-    private bool eaten;
-    private Quaternion prevAngle;
-    private RaycastHit closestStructure;
-    private LayerMask layerMask;
+    private string status;
+    private FishAvoidObjects largeTrigger;
+    private List<GameObject> objectsToAvoid = new();
+
 
     //---------------------- METHODS ----------------------\\
 
     private void Awake()
     {
-        layerMask = 1 << layerToAvoid;
         rb = GetComponent<Rigidbody>();
-        prevAngle = rb.rotation;
+
+        // object avoidance setup
+        status = "ok";
+        GetComponentInChildren<SphereCollider>().radius = avoidDistance / 2; //radius is half diameter
+        largeTrigger = GetComponentInChildren<FishAvoidObjects>();
+        largeTrigger.OnTriggerCollide.AddListener(AddTriggerCollider);
+        largeTrigger.OnTriggerLeave.AddListener(RemoveTriggerCollider);
+
     }
 
     private void Update()
     {
-        Rotate();
-        Movement();
+        //check what surrounds the fish every frame
+        if (objectsToAvoid.Count > 0)
+        {
+            //only focus on dolphin avoidance if there is no walls around
+            if (objectsToAvoid.Count == 1 && objectsToAvoid[0].CompareTag("Player"))
+            {
+                status = "dolphin";
+            }
+            else
+            {
+                foreach (GameObject obj in objectsToAvoid)
+                {
+                    if (obj.CompareTag("Structure")) status = "wall"; //stopping wall collision is 1st priority
+                    else if (obj.CompareTag("Player")) //ANY objects are dolphin
+                    { 
+                        //flee 
+                        continue;
+                    }
+                    //stop flee
+                }
+            }
+        }
+        else
+        {
+            status = "ok";
+            //speed decrease
+        }
+
+        if (status == "ok") //random movement
+        {
+            Rotate();
+            //Movement();
+        }
+        else if (status == "wall") //wall/floor too close
+        {
+            //dont speed up
+            //turn slightly away from object
+            //CollisionAvoidance();
+        }
+        else if (status == "dolphin") //dolphin too close
+        {
+            //speed up
+            //turn completely away from object
+        }
     }
 
     //method to handle swimming with no collision checks
@@ -47,7 +96,7 @@ public class Fish : MonoBehaviour
         //make new vertical angle, constrained by maxAngle
         float currentVert = rb.rotation.eulerAngles.x;
         currentVert = (currentVert > 180 ? currentVert - 360 : currentVert); //fix 340 into -20
-        float vertRotate = Random.Range(-avgAngle, avgAngle) + currentVert; 
+        float vertRotate = Random.Range(-avgAngle, avgAngle) + currentVert;
         vertRotate = Mathf.Clamp(vertRotate, -maxAngle, maxAngle); //clamp to max angles
 
         //rotate fish with new angles
@@ -55,47 +104,30 @@ public class Fish : MonoBehaviour
     }
 
     //method to push the fish forward
-    private void Movement() 
+    private void Movement()
     {
         float velocity = Random.Range(minSpeed, maxSpeed);
         rb.AddRelativeForce(Vector3.forward * velocity);
     }
-    
+
+    //method to handle fish being eaten
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Bite Area") && !eaten)
+        if (other.CompareTag("Bite Area") && status != "eaten")
         {
-            eaten = true;
-            GameManager.Instance.Points += pointsOnEat;
-            Destroy(gameObject);
-        }
-
-        if (other.CompareTag("Structure"))
-        {
-            //CollisionAvoidance();
-            print("collision avoidance");
+            status = "eaten";
+            //GameManager.Instance.Points += pointsOnEat;       //BUG currently gets eaten if largeTrigger and Bite Area touch
+            //Destroy(gameObject);
         }
     }
 
-    private void CollisionAvoidance()
+    private void AddTriggerCollider(GameObject other)
     {
-        RaycastHit hit;
+        objectsToAvoid.Add(other);
+    }
 
-        // Cast a sphere wrapping character controller 10 meters forward to see if it is about to hit anything.
-        if (Physics.SphereCast(transform.position, transform.lossyScale.y / 2, transform.forward, out hit, wallFloorDistance, layerMask))
-        {
-            closestStructure = hit;
-        }
-        else
-        {
-            closestStructure = new();
-        }
-
-        if (closestStructure.point != Vector3.zero) //if too close to a wall
-        {
-            float deltaX = transform.position.x - closestStructure.point.x;
-            float angleToStructure = Mathf.Asin(deltaX / closestStructure.distance);
-            print(angleToStructure);
-        }
+    private void RemoveTriggerCollider(GameObject other)
+    {
+        objectsToAvoid.Remove(other);
     }
 }
