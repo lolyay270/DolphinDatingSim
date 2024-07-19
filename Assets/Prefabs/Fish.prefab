@@ -135,12 +135,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsOnEat: 10
-  maxSpeed: 0.01
-  minSpeed: 0.001
-  avgAngle: 0.2
+  maxSpeed: 1
+  minSpeed: 0.1
+  avgAngle: 5
   maxAngle: 50
   rotationDelayTime: 0.1
+  massInWater: 1
+  dragInWater: 2
+  massOutWater: 1
+  dragOutWater: 0.1
   avoidDistance: 10
+  fleeSpeedMultiplier: 0
+  wallLeaveAngle: 20
 --- !u!54 &4182977329843668161
 Rigidbody:
   m_ObjectHideFlags: 0
