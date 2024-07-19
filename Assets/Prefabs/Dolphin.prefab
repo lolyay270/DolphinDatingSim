@@ -614,7 +614,7 @@ MonoBehaviour:
   boostDelayTime: 5
   massInWater: 100
   dragInWater: 2
-  massOutWater: 600
+  massOutWater: 700
   dragOutWater: 0.5
   mouseSensitivity: 0.4
 --- !u!54 &5651433222456347588

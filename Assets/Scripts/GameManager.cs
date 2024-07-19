@@ -25,5 +25,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        //hide cursor
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }
